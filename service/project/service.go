@@ -14,7 +14,7 @@ import (
 type IService interface {
 	CreateProject(ctx context.Context, name string) (outputProject, error)
 	ListProject(ctx context.Context) ([]outputProject, error)
-	AddFAQ(ctx context.Context, input addFAQInput) (outputFAQ, error)
+	CreateFAQ(ctx context.Context, input addFAQInput) (outputFAQ, error)
 }
 
 type service struct {
@@ -85,7 +85,7 @@ func toOutputProject(project model.Project) outputProject {
 	}
 }
 
-func (s service) AddFAQ(ctx context.Context, input addFAQInput) (outputFAQ, error) {
+func (s service) CreateFAQ(ctx context.Context, input addFAQInput) (outputFAQ, error) {
 	var err error
 	var id int64
 	err = s.txnProvider.Transact(ctx, func(ctx context.Context) error {

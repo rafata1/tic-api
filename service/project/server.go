@@ -10,7 +10,7 @@ import (
 type IServer interface {
 	CreateProject(c *gin.Context)
 	ListProjects(c *gin.Context)
-	AddFAQ(c *gin.Context)
+	CreateFAQ(c *gin.Context)
 }
 
 type server struct {
@@ -44,7 +44,7 @@ func (s server) ListProjects(c *gin.Context) {
 	common.WriteSuccess(c, output)
 }
 
-func (s server) AddFAQ(c *gin.Context) {
+func (s server) CreateFAQ(c *gin.Context) {
 	projectID, err := util.ParseInt64(
 		c.Param("project_id"),
 	)
@@ -61,7 +61,7 @@ func (s server) AddFAQ(c *gin.Context) {
 	}
 
 	input.ProjectID = projectID
-	output, err := s.service.AddFAQ(c, input)
+	output, err := s.service.CreateFAQ(c, input)
 	if err != nil {
 		common.WriteError(c, err)
 		return

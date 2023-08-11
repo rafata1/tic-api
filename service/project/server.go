@@ -1,12 +1,9 @@
 package project
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
-	"github.com/rafata1/tic-api/service/auth"
 	"github.com/rafata1/tic-api/service/common"
-	"log"
 )
 
 type IServer interface {
@@ -25,10 +22,7 @@ func (s server) CreateProject(c *gin.Context) {
 		return
 	}
 
-	log.Printf(auth.GetUserEmail(c))
-
-	ctx := context.Background()
-	output, err := s.service.CreateProject(ctx, dtoProject.Name)
+	output, err := s.service.CreateProject(c, dtoProject.Name)
 	if err != nil {
 		common.WriteError(c, err)
 		return

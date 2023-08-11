@@ -5,6 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/rafata1/tic-api/model"
 	"github.com/rafata1/tic-api/repository"
+	"github.com/rafata1/tic-api/service/auth"
 	"github.com/rafata1/tic-api/service/common"
 	"log"
 )
@@ -24,11 +25,21 @@ func (s service) CreateProject(ctx context.Context, name string) (OutputProject,
 	}
 	var projectID int64
 	var err error
+
+	userEmail := auth.GetUserEmail(ctx)
 	err = s.txnProvider.Transact(ctx, func(ctx context.Context) error {
 		projectID, err = s.projectRepo.InsertProject(
 			ctx,
 			model.Project{Name: name},
 		)
+		if err != nil {
+			return err
+		}
+
+		err = s.projectRepo.InsertProjectMember(ctx, model.ProjectMember{
+			ProjectID:   projectID,
+			MemberEmail: userEmail,
+		})
 		return err
 	})
 

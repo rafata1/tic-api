@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/rafata1/tic-api/service/common"
 )
@@ -51,7 +52,7 @@ func (s service) AuthenticationInterceptor() gin.HandlerFunc {
 	}
 }
 
-func GetUserEmail(c *gin.Context) string {
-	email, _ := c.Get(emailKey)
+func GetUserEmail(c context.Context) string {
+	email := c.Value(emailKey)
 	return email.(string)
 }

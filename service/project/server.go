@@ -8,6 +8,7 @@ import (
 
 type IServer interface {
 	CreateProject(c *gin.Context)
+	ListProjects(c *gin.Context)
 }
 
 type server struct {
@@ -23,6 +24,17 @@ func (s server) CreateProject(c *gin.Context) {
 	}
 
 	output, err := s.service.CreateProject(c, dtoProject.Name)
+	if err != nil {
+		common.WriteError(c, err)
+		return
+	}
+
+	common.WriteSuccess(c, output)
+	return
+}
+
+func (s server) ListProjects(c *gin.Context) {
+	output, err := s.service.ListProject(c)
 	if err != nil {
 		common.WriteError(c, err)
 		return

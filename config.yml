@@ -1,0 +1,19 @@
+log:
+  level: debug # debug, info, warn, errors, dpanic, panic, fatal
+  mode: production # development
+  encoding: json # console
+
+mysql:
+  host: localhost
+  port: 3306
+  database: tic-26-db
+  username: root
+  password: 1
+  max_open_conns: 20
+  max_idle_conns: 5
+  options:
+    - key: 'parseTime'
+      value: 'true'
+
+iam:
+  endpoint: https://identity.develop.tekoapis.net/api/v1/me

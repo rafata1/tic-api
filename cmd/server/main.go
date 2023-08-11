@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/rafata1/tic-api/config"
+	"github.com/rafata1/tic-api/service/auth"
 	"github.com/rafata1/tic-api/service/project"
 	"github.com/spf13/cobra"
 	"os"
@@ -42,6 +43,8 @@ func runServer() {
 	gin.SetMode(os.Getenv("GIN_MODE"))
 	router := gin.Default()
 	router.Use(cors.Default())
+	authService := auth.NewService(conf.IAM.Endpoint)
+	router.Use(authService.AuthenticationInterceptor())
 
 	projectServer := project.NewServer(db)
 	router.POST("/api/v1/projects", projectServer.CreateProject)

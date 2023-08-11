@@ -15,6 +15,7 @@ type IService interface {
 	CreateProject(ctx context.Context, name string) (outputProject, error)
 	ListProject(ctx context.Context) ([]outputProject, error)
 	CreateFAQ(ctx context.Context, input addFAQInput) (outputFAQ, error)
+	ListFAQs(ctx context.Context, projectID int64) ([]outputFAQ, error)
 }
 
 type service struct {
@@ -123,6 +124,39 @@ func (s service) validateProjectPerm(ctx context.Context, projectID int64) error
 		return common.ErrUnauthorized
 	}
 	return nil
+}
+
+func (s service) ListFAQs(ctx context.Context, projectID int64) ([]outputFAQ, error) {
+	ctx = s.txnProvider.Readonly(ctx)
+	err := s.validateProjectPerm(ctx, projectID)
+	if err != nil {
+		return nil, err
+	}
+
+	faqs, err := s.projectRepo.ListFAQs(ctx, projectID)
+	if err != nil {
+		log.Printf("error listing FAQs %s\n", err.Error())
+		return nil, common.ErrQueryIntoDB
+	}
+	return toOutputFAQs(faqs), nil
+}
+
+func toOutputFAQs(faqs []model.FAQ) []outputFAQ {
+	res := make([]outputFAQ, 0, len(faqs))
+	for _, faq := range faqs {
+		res = append(res, toOutputFAQ(faq))
+	}
+	return res
+}
+
+func toOutputFAQ(faq model.FAQ) outputFAQ {
+	return outputFAQ{
+		ID:        faq.ID,
+		Question:  faq.Question,
+		Answer:    faq.Answer,
+		CreatedAt: faq.CreatedAt,
+		UpdatedAt: faq.UpdatedAt,
+	}
 }
 
 func NewService(db *sqlx.DB) IService {

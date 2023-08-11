@@ -11,6 +11,7 @@ type IProjectRepo interface {
 	GetProjectsByUser(ctx context.Context, email string) ([]model.Project, error)
 	GetProjectMember(ctx context.Context, email string, projectID int64) (model.ProjectMember, error)
 	AddFAQ(ctx context.Context, faq model.FAQ) (int64, error)
+	ListFAQs(ctx context.Context, projectID int64) ([]model.FAQ, error)
 }
 
 type repo struct{}
@@ -70,6 +71,17 @@ var getProjectMember = `
 func (r repo) GetProjectMember(ctx context.Context, email string, projectID int64) (model.ProjectMember, error) {
 	var res model.ProjectMember
 	err := GetReadonly(ctx).GetContext(ctx, &res, getProjectMember, email, projectID)
+	return res, err
+}
+
+var listFAQs = `
+	SELECT id, question, answer, created_at, updated_at FROM faq
+	WHERE project_id = ?
+`
+
+func (r repo) ListFAQs(ctx context.Context, projectID int64) ([]model.FAQ, error) {
+	var res []model.FAQ
+	err := GetReadonly(ctx).SelectContext(ctx, &res, listFAQs, projectID)
 	return res, err
 }
 

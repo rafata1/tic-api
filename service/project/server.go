@@ -11,6 +11,7 @@ type IServer interface {
 	CreateProject(c *gin.Context)
 	ListProjects(c *gin.Context)
 	CreateFAQ(c *gin.Context)
+	ListFAQs(c *gin.Context)
 }
 
 type server struct {
@@ -62,6 +63,22 @@ func (s server) CreateFAQ(c *gin.Context) {
 
 	input.ProjectID = projectID
 	output, err := s.service.CreateFAQ(c, input)
+	if err != nil {
+		common.WriteError(c, err)
+		return
+	}
+	common.WriteSuccess(c, output)
+}
+
+func (s server) ListFAQs(c *gin.Context) {
+	projectID, err := util.ParseInt64(
+		c.Param("project_id"),
+	)
+	if err != nil {
+		common.WriteError(c, common.ErrBadRequest)
+		return
+	}
+	output, err := s.service.ListFAQs(c, projectID)
 	if err != nil {
 		common.WriteError(c, err)
 		return

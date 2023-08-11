@@ -6,3 +6,4 @@ import (
 )
 
 var ErrProjectNameRequired = errors.New(http.StatusBadRequest, "project name is required")
+var ErrNoProjectPerm = errors.New(http.StatusUnauthorized, "no permission")

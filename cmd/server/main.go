@@ -47,6 +47,7 @@ func runServer() {
 	router.Use(authService.AuthenticationInterceptor())
 
 	projectServer := project.NewServer(db)
+	router.POST("/api/v1/projects/:project_id/faqs", projectServer.AddFAQ)
 	router.POST("/api/v1/projects", projectServer.CreateProject)
 	router.GET("/api/v1/projects", projectServer.ListProjects)
 

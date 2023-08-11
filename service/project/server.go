@@ -4,11 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"github.com/rafata1/tic-api/service/common"
+	"github.com/rafata1/tic-api/util"
 )
 
 type IServer interface {
 	CreateProject(c *gin.Context)
 	ListProjects(c *gin.Context)
+	AddFAQ(c *gin.Context)
 }
 
 type server struct {
@@ -16,21 +18,20 @@ type server struct {
 }
 
 func (s server) CreateProject(c *gin.Context) {
-	var dtoProject DTOProject
-	err := c.Bind(&dtoProject)
+	var input addProjectInput
+	err := c.Bind(&input)
 	if err != nil {
-		common.WriteError(c, err)
+		common.WriteError(c, common.ErrBadRequest)
 		return
 	}
 
-	output, err := s.service.CreateProject(c, dtoProject.Name)
+	output, err := s.service.CreateProject(c, input.Name)
 	if err != nil {
 		common.WriteError(c, err)
 		return
 	}
 
 	common.WriteSuccess(c, output)
-	return
 }
 
 func (s server) ListProjects(c *gin.Context) {
@@ -41,7 +42,31 @@ func (s server) ListProjects(c *gin.Context) {
 	}
 
 	common.WriteSuccess(c, output)
-	return
+}
+
+func (s server) AddFAQ(c *gin.Context) {
+	projectID, err := util.ParseInt64(
+		c.Param("project_id"),
+	)
+	if err != nil {
+		common.WriteError(c, common.ErrBadRequest)
+		return
+	}
+
+	var input addFAQInput
+	err = c.Bind(&input)
+	if err != nil {
+		common.WriteError(c, common.ErrBadRequest)
+		return
+	}
+
+	input.ProjectID = projectID
+	output, err := s.service.AddFAQ(c, input)
+	if err != nil {
+		common.WriteError(c, err)
+		return
+	}
+	common.WriteSuccess(c, output)
 }
 
 func NewServer(db *sqlx.DB) IServer {

@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"git.teko.vn/dung.cda/tic-26-be/config"
-	"git.teko.vn/dung.cda/tic-26-be/service/project"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/rafata1/tic-api/config"
+	"github.com/rafata1/tic-api/service/project"
 	"github.com/spf13/cobra"
 	"os"
 )

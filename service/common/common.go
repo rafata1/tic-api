@@ -1,8 +1,8 @@
 package common
 
 import (
-	"git.teko.vn/dung.cda/tic-26-be/package/errors"
 	"github.com/gin-gonic/gin"
+	"github.com/rafata1/tic-api/package/errors"
 	"net/http"
 )
 

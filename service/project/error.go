@@ -1,7 +1,7 @@
 package project
 
 import (
-	"git.teko.vn/dung.cda/tic-26-be/package/errors"
+	"github.com/rafata1/tic-api/package/errors"
 	"net/http"
 )
 

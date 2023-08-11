@@ -3,7 +3,6 @@ module github.com/rafata1/tic-api
 go 1.20
 
 require (
-	git.teko.vn/dung.cda/tic-26-be v0.0.0-20230811072735-5b56d3f5a754
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-sql-driver/mysql v1.7.1

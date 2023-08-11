@@ -2,9 +2,9 @@ package project
 
 import (
 	"context"
-	"git.teko.vn/dung.cda/tic-26-be/service/common"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
+	"github.com/rafata1/tic-api/service/common"
 )
 
 type IServer interface {

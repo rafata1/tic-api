@@ -2,10 +2,10 @@ package project
 
 import (
 	"context"
-	"git.teko.vn/dung.cda/tic-26-be/model"
-	"git.teko.vn/dung.cda/tic-26-be/repository"
-	"git.teko.vn/dung.cda/tic-26-be/service/common"
 	"github.com/jmoiron/sqlx"
+	"github.com/rafata1/tic-api/model"
+	"github.com/rafata1/tic-api/repository"
+	"github.com/rafata1/tic-api/service/common"
 	"log"
 )
 

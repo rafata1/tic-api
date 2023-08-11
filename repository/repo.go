@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"git.teko.vn/dung.cda/tic-26-be/model"
+	"github.com/rafata1/tic-api/model"
 )
 
 type IRepo interface {

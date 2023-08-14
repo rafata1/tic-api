@@ -51,6 +51,7 @@ func runServer() {
 	router.GET("/api/v1/projects/:project_id/faqs", projectServer.ListFAQs)
 	router.POST("/api/v1/projects/:project_id/faqs", projectServer.CreateFAQ)
 	router.POST("/api/v1/projects", projectServer.CreateProject)
+	router.GET("/api/v1/projects/:project_id", projectServer.GetProject)
 	router.GET("/api/v1/projects", projectServer.ListProjects)
 	chatServer := chat.NewServer()
 	router.GET("/api/v1/chat", chatServer.Answer)

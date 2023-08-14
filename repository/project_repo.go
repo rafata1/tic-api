@@ -8,6 +8,7 @@ import (
 type IProjectRepo interface {
 	InsertProject(ctx context.Context, project model.Project) (int64, error)
 	InsertProjectMember(ctx context.Context, projectMember model.ProjectMember) error
+	GetProjectByID(ctx context.Context, id int64) (model.Project, error)
 	GetProjectsByUser(ctx context.Context, email string) ([]model.Project, error)
 	GetProjectMember(ctx context.Context, email string, projectID int64) (model.ProjectMember, error)
 	AddFAQ(ctx context.Context, faq model.FAQ) (int64, error)
@@ -36,6 +37,17 @@ func (r repo) InsertProject(ctx context.Context, project model.Project) (int64, 
 		return 0, err
 	}
 	return res.LastInsertId()
+}
+
+var getProjectByID = `
+	SELECT id, name, created_at, updated_at FROM project
+	WHERE id = ?
+`
+
+func (r repo) GetProjectByID(ctx context.Context, id int64) (model.Project, error) {
+	var res model.Project
+	err := GetReadonly(ctx).GetContext(ctx, &res, getProjectByID, id)
+	return res, err
 }
 
 var getProjectsByUser = `

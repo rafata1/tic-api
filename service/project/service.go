@@ -14,6 +14,7 @@ import (
 type IService interface {
 	CreateProject(ctx context.Context, name string) (outputProject, error)
 	ListProject(ctx context.Context) ([]outputProject, error)
+	GetProject(ctx context.Context, id int64) (outputProject, error)
 	CreateFAQ(ctx context.Context, input inputFAQ) (outputFAQ, error)
 	ListFAQs(ctx context.Context, projectID int64) ([]outputFAQ, error)
 }
@@ -67,6 +68,20 @@ func (s service) ListProject(ctx context.Context) ([]outputProject, error) {
 		return nil, common.ErrQueryIntoDB
 	}
 	return toOutputProjects(projects), err
+}
+
+func (s service) GetProject(ctx context.Context, id int64) (outputProject, error) {
+	ctx = s.txnProvider.Readonly(ctx)
+	err := s.validateProjectPerm(ctx, id)
+	if err != nil {
+		return outputProject{}, err
+	}
+
+	project, err := s.projectRepo.GetProjectByID(ctx, id)
+	if err != nil {
+		return outputProject{}, common.ErrQueryIntoDB
+	}
+	return toOutputProject(project), nil
 }
 
 func toOutputProjects(projects []model.Project) []outputProject {

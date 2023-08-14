@@ -10,6 +10,7 @@ import (
 type IServer interface {
 	CreateProject(c *gin.Context)
 	ListProjects(c *gin.Context)
+	GetProject(c *gin.Context)
 	CreateFAQ(c *gin.Context)
 	ListFAQs(c *gin.Context)
 }
@@ -42,6 +43,23 @@ func (s server) ListProjects(c *gin.Context) {
 		return
 	}
 
+	common.WriteSuccess(c, output)
+}
+
+func (s server) GetProject(c *gin.Context) {
+	projectID, err := util.ParseInt64(
+		c.Param("project_id"),
+	)
+	if err != nil {
+		common.WriteError(c, common.ErrBadRequest)
+		return
+	}
+
+	output, err := s.service.GetProject(c, projectID)
+	if err != nil {
+		common.WriteError(c, err)
+		return
+	}
 	common.WriteSuccess(c, output)
 }
 

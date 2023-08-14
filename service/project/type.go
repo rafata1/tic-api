@@ -2,7 +2,7 @@ package project
 
 import "time"
 
-type addProjectInput struct {
+type inputProject struct {
 	Name string `json:"name"`
 }
 
@@ -13,7 +13,7 @@ type outputProject struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type addFAQInput struct {
+type inputFAQ struct {
 	ProjectID int64  `json:"project_id"`
 	Question  string `json:"question"`
 	Answer    string `json:"answer"`

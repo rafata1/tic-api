@@ -7,6 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/rafata1/tic-api/config"
 	"github.com/rafata1/tic-api/service/auth"
+	"github.com/rafata1/tic-api/service/chat"
 	"github.com/rafata1/tic-api/service/project"
 	"github.com/spf13/cobra"
 	"os"
@@ -42,7 +43,7 @@ func runServer() {
 
 	gin.SetMode(os.Getenv("GIN_MODE"))
 	router := gin.Default()
-	router.Use(cors.Default())
+	router.Use(getCorsMiddleware())
 	authService := auth.NewService(conf.IAM.Endpoint)
 	router.Use(authService.AuthenticationInterceptor())
 
@@ -51,8 +52,25 @@ func runServer() {
 	router.POST("/api/v1/projects/:project_id/faqs", projectServer.CreateFAQ)
 	router.POST("/api/v1/projects", projectServer.CreateProject)
 	router.GET("/api/v1/projects", projectServer.ListProjects)
+	chatServer := chat.NewServer()
+	router.GET("/api/v1/chat", chatServer.Answer)
 
 	if err := router.Run(); err != nil {
 		panic(err)
 	}
+}
+
+func getCorsMiddleware() gin.HandlerFunc {
+	conf := cors.DefaultConfig()
+	conf.AllowAllOrigins = true
+	conf.AllowHeaders = []string{
+		"Origin",
+		"Accept",
+		"Content-Type",
+		"Content-Length",
+		"Accept-Encoding",
+		"Authorization",
+		"X-CSRF-Token",
+	}
+	return cors.New(conf)
 }

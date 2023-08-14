@@ -19,7 +19,7 @@ type server struct {
 }
 
 func (s server) CreateProject(c *gin.Context) {
-	var input addProjectInput
+	var input inputProject
 	err := c.Bind(&input)
 	if err != nil {
 		common.WriteError(c, common.ErrBadRequest)
@@ -54,7 +54,7 @@ func (s server) CreateFAQ(c *gin.Context) {
 		return
 	}
 
-	var input addFAQInput
+	var input inputFAQ
 	err = c.Bind(&input)
 	if err != nil {
 		common.WriteError(c, common.ErrBadRequest)

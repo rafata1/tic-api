@@ -14,7 +14,7 @@ import (
 type IService interface {
 	CreateProject(ctx context.Context, name string) (outputProject, error)
 	ListProject(ctx context.Context) ([]outputProject, error)
-	CreateFAQ(ctx context.Context, input addFAQInput) (outputFAQ, error)
+	CreateFAQ(ctx context.Context, input inputFAQ) (outputFAQ, error)
 	ListFAQs(ctx context.Context, projectID int64) ([]outputFAQ, error)
 }
 
@@ -86,7 +86,7 @@ func toOutputProject(project model.Project) outputProject {
 	}
 }
 
-func (s service) CreateFAQ(ctx context.Context, input addFAQInput) (outputFAQ, error) {
+func (s service) CreateFAQ(ctx context.Context, input inputFAQ) (outputFAQ, error) {
 	var err error
 	var id int64
 	err = s.txnProvider.Transact(ctx, func(ctx context.Context) error {
@@ -100,7 +100,7 @@ func (s service) CreateFAQ(ctx context.Context, input addFAQInput) (outputFAQ, e
 	return outputFAQ{ID: id}, err
 }
 
-func toFAQModel(input addFAQInput) model.FAQ {
+func toFAQModel(input inputFAQ) model.FAQ {
 	return model.FAQ{
 		ProjectID: input.ProjectID,
 		Question:  input.Question,

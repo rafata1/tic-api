@@ -56,7 +56,7 @@ func runServer() {
 	router.GET("/api/v1/projects", projectServer.ListProjects)
 
 	chatServer := chat.NewServer()
-	router.GET("/api/v1/chat", chatServer.Answer)
+	router.POST("/api/v1/chat", chatServer.Answer)
 
 	ticketServer := ticket.NewServer(conf)
 	router.POST("/api/v1/tickets", ticketServer.CreateTicket)

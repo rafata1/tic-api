@@ -17,3 +17,8 @@ mysql:
 
 iam:
   endpoint: https://identity.develop.tekoapis.net/api/v1/me
+
+jira:
+  base_url: https://dungcda.atlassian.net
+  username: caodung566@gmail.com
+  password: ATATT3xFfGF0YsH1OTYgfkbxQq904YJZjicsFTgMc6g8q8CSlUr7aRid5OcCMDziRqvSa8h2rA-tKUI3lJZIY9gTb4lvMBsy8B-IOUNqMiKSXP0r6Z_X0Pv2YzDD52bf8-EIpgrGvUhibax-H6_-GxyFjTzxT8-2R1efSql5KWoJzrq_5nM_mkk=C4B5957F

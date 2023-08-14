@@ -9,6 +9,7 @@ import (
 	"github.com/rafata1/tic-api/service/auth"
 	"github.com/rafata1/tic-api/service/chat"
 	"github.com/rafata1/tic-api/service/project"
+	"github.com/rafata1/tic-api/service/ticket"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -53,8 +54,12 @@ func runServer() {
 	router.POST("/api/v1/projects", projectServer.CreateProject)
 	router.GET("/api/v1/projects/:project_id", projectServer.GetProject)
 	router.GET("/api/v1/projects", projectServer.ListProjects)
+
 	chatServer := chat.NewServer()
 	router.GET("/api/v1/chat", chatServer.Answer)
+
+	ticketServer := ticket.NewServer(conf)
+	router.POST("/api/v1/tickets", ticketServer.CreateTicket)
 
 	if err := router.Run(); err != nil {
 		panic(err)

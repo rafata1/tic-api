@@ -10,6 +10,7 @@ import (
 type Config struct {
 	MySQL MySQLConfig `mapstructure:"mysql"`
 	IAM   IAMConfig   `mapstructure:"iam"`
+	Jira  JiraConfig  `mapstructure:"jira"`
 }
 
 // Load config from config.yml

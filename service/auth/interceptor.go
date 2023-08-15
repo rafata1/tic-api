@@ -23,10 +23,19 @@ const authorization = "authorization"
 const bearerPrefix = "Bearer "
 const emailKey = "email"
 
+var publicEndpoints = map[string]struct{}{
+	"/api/v1/chat":    {},
+	"/api/v1/tickets": {},
+}
+
 func (s service) AuthenticationInterceptor() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		header := c.GetHeader(authorization)
+		if _, ok := publicEndpoints[c.FullPath()]; ok {
+			c.Next()
+			return
+		}
 
+		header := c.GetHeader(authorization)
 		if len(header) < len(bearerPrefix) {
 			common.WriteError(c, ErrInvalidIAMToken)
 			c.Abort()

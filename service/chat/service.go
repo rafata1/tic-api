@@ -2,7 +2,9 @@ package chat
 
 import (
 	"context"
+	"fmt"
 	"regexp"
+	"strings"
 )
 
 type IService interface {
@@ -18,9 +20,25 @@ func (s service) Answer(ctx context.Context, userInput inputChat) (outputChat, e
 			Type: "issue_tracking",
 		}, nil
 	}
+
+	satisfactionQues := "Bạn có hài lòng với câu trả lời này không?"
+	if strings.Contains(strings.ToLower(userInput.Text), "segment") {
+		return outputChat{
+			Text: fmt.Sprintf("%s\n\n%s", segmentAnswer, satisfactionQues),
+			Type: "satisfaction",
+		}, nil
+	}
+
+	if strings.Contains(strings.ToLower(userInput.Text), "ott") {
+		return outputChat{
+			Text: fmt.Sprintf("%s\n\n%s", ottAnswer, satisfactionQues),
+			Type: "satisfaction",
+		}, nil
+	}
+
 	return outputChat{
-		Text: "Bạn có hài lòng không hả?",
-		Type: "satisfaction",
+		Text: "Câu hỏi của bạn không phổ biến, vui lòng tạo yêu cầu hỗ trợ",
+		Type: "create_ticket",
 	}, nil
 }
 
